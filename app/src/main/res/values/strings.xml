@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">NewsReaders</string>
+
+<!--  IntroActivity  -->
+    <string name="intro_main_img_desc">Describing Main Intro Img</string>
+    <string name="intro_main_text">
+        최신 이슈가 궁금하신가요?
+        \n\n매일 실시간 주요 뉴스를 제공해드리고 있습니다.
+        \n\n지금 바로 시작합니다!
+    </string>
+    <string name="intro_version_text">v1.0</string>
+
+<!--  NewsListActivity  -->
+    <string name="list_center">List!</string>
+
+<!--  NewsViewActivity  -->
+
+
+
+
+</resources>
