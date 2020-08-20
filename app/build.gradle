@@ -30,65 +30,58 @@ android {
 
 }
 
-dependencies {
 
-    def lifecycle_version = "2.2.0"
-    def room_version = '2.2.5'
+dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.core:core-ktx:1.3.1'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.json:json:20180813'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
 
-    //RecyclerView & CardView
+    // RecyclerView & CardView
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'
 
-    //LiveData
-    implementation "androidx.lifecycle:lifecycle-viewmodel:2.2.0"
-
-    //okHttp
-    //https://square.github.io/okhttp/
+    // okHttp
     implementation("com.squareup.okhttp3:okhttp:4.4.0")
 
-    //circleImageView
-    // https://github.com/hdodenhof/CircleImageView
+    // circleImageView
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-    //jSoup
-    // https://jsoup.org/
+    // jSoup
     implementation 'org.jsoup:jsoup:1.13.1'
 
-    //Glide
-    // https://github.com/bumptech/glide
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 
+    // retrofit2 /app/build.gradle dependencies
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
-
-    // Lifecycle only (without ViewModel or LiveData)
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
-
-    // Activity
-    // 추가해야 viewModel 에러 발생 x
-    implementation "androidx.activity:activity-ktx:1.1.0"
-
-    // ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-
-    // LiveData
+    // LiveData & ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-
-    // Annotation processor
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
-    //Room
+    // Room
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    // Activity, 추가해야 viewModel 에러 발생x
+    implementation "androidx.activity:activity-ktx:1.1.0"
+
+    // Coroutine
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.0")
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.3.72"
+
 
 }
