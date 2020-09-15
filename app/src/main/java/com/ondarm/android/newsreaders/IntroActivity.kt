@@ -17,9 +17,6 @@ class IntroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
 
-        Log.d("MyTest1", "1. ${application==applicationContext}")
-        Log.d("MyTest1", "2. ${application===applicationContext}")
-
         /** 1.3초 대기 후 메인 뉴스화면으로 이동 **/
         val splashHandler = Handler()
         splashHandler.postDelayed(Runnable {
