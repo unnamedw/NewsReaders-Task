@@ -1,52 +1,24 @@
 package com.ondarm.android.newsreaders
 
 import android.content.Intent
-import android.content.res.AssetManager
-import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ondarm.android.newsreaders.viewmodel.IntroViewModel
-import kotlinx.coroutines.*
-import java.io.*
 import java.lang.Runnable
+import java.util.*
 
 class IntroActivity : AppCompatActivity() {
-    lateinit var introViewModel: IntroViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
-        introViewModel= ViewModelProvider(this).get(IntroViewModel::class.java)
-        CoroutineScope(Dispatchers.IO).launch {
-            launch {
 
-
-            }
-        }
-
-        var inputStream: InputStream? = null
-        try{
-            val assetManager = applicationContext.assets
-            Log.d("json", "1")
-            inputStream = assetManager.open("test.json")
-            Log.d("json", "2")
-            //파일읽기
-            val jsonString = inputStream.bufferedReader().use { it.readText() }
-
-            //읽은내용 출력
-            Log.d("json", "결과: $jsonString")
-        } catch (e: IOException){
-            e.printStackTrace();
-        } finally {
-            inputStream?.close()
-        }
-
-
-
-
+        Log.d("MyTest1", "1. ${application==applicationContext}")
+        Log.d("MyTest1", "2. ${application===applicationContext}")
 
         /** 1.3초 대기 후 메인 뉴스화면으로 이동 **/
         val splashHandler = Handler()
@@ -55,9 +27,8 @@ class IntroActivity : AppCompatActivity() {
             finish()
         },1300)
 
-
-
     }
+
 
 
 }

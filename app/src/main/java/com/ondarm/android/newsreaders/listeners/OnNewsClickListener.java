@@ -1,4 +1,4 @@
-package com.ondarm.android.newsreaders;
+package com.ondarm.android.newsreaders.listeners;
 
 @FunctionalInterface
 public interface OnNewsClickListener {

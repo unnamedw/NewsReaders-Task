@@ -15,6 +15,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
@@ -28,21 +29,50 @@ android {
         enabled = true
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    // Coroutine Library 추가 시 발생하는 META-INF 관련 문제를 해결하기 위해 삽입
+    // Coroutine version 수정 이후 문제 해결
+//    configurations.all {
+//        resolutionStrategy {
+//            exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+//        }
+//    }
+
 }
 
 
 dependencies {
+    def lifecycle_version = "2.2.0"
+    def room_version = '2.2.5'
+    def retrofit_version = '2.7.0'
+    def glide_version = '4.11.0'
+    def work_version = "2.4.0"
+    def nav_version = "2.3.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.core:core-ktx:1.3.1'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.json:json:20180813'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    // swipeRefreshView
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
     // RecyclerView & CardView
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
@@ -58,30 +88,37 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.13.1'
 
     // Glide
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
+    implementation "com.github.bumptech.glide:glide:${glide_version}"
+    annotationProcessor "com.github.bumptech.glide:compiler:${glide_version}"
 
     // retrofit2 /app/build.gradle dependencies
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:retrofit:${retrofit_version}"
+    implementation "com.squareup.retrofit2:converter-gson:${retrofit_version}"
 
     // LiveData & ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${lifecycle_version}"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${lifecycle_version}"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycle_version}"
+    kapt "androidx.lifecycle:lifecycle-compiler:${lifecycle_version}"
 
     // Room
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-runtime:${room_version}"
+    kapt "androidx.room:room-compiler:${room_version}"
 
-    // Activity, 추가해야 viewModel 에러 발생x
+    // Activity
     implementation "androidx.activity:activity-ktx:1.1.0"
 
     // Coroutine
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.0")
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.3.72"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.0") // META-INF 에러 원인, 1.3.0 에서 문제 발생 없으나 1.3.7 에서 문제 발생함
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    // WorkManager
+    implementation "android.arch.work:work-runtime-ktx:${work_version}"
+
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:${nav_version}"
+    implementation "androidx.navigation:navigation-ui-ktx:${nav_version}"
+
 
 
 }

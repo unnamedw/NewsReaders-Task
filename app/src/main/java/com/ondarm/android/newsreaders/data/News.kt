@@ -1,4 +1,4 @@
-package com.ondarm.android.newsreaders.model
+package com.ondarm.android.newsreaders.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
