@@ -7,12 +7,16 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ondarm.android.newsreaders.adapters.NewsListAdapter
 import com.ondarm.android.newsreaders.listeners.OnNewsClickListener
 import com.ondarm.android.newsreaders.data.News
+import com.ondarm.android.newsreaders.data.NewsRepository
+import com.ondarm.android.newsreaders.data.RemoteNewsData
 import com.ondarm.android.newsreaders.databinding.ActivityNewsListBinding
 import com.ondarm.android.newsreaders.viewmodels.NewsListViewModel
 import com.ondarm.android.newsreaders.viewmodels.NewsListViewModelFactory
@@ -24,12 +28,11 @@ import kotlinx.coroutines.launch
 
 
 class NewsListActivity : AppCompatActivity() {
-    private val newsUrls = mutableListOf<String>()
-    private val newsList = mutableListOf<News>()
-    private val adapter = NewsListAdapter(this, newsList)
-    private val job = Job()
-    private val scope = CoroutineScope(Dispatchers.Main + job)
-//    private val viewModel: NewsListViewModel by viewModels { NewsListViewModelFactory() }
+//    lateinit var newsList: List<News>
+    private val adapter by lazy { NewsListAdapter(this, listOf()) }
+    private val remoteDataSource = RemoteNewsData()
+    private val repository = NewsRepository(remoteDataSource)
+    private val viewModel: NewsListViewModel by viewModels { NewsListViewModelFactory(repository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +42,10 @@ class NewsListActivity : AppCompatActivity() {
             }
 
         // 뉴스 세팅
-//        newsListViewModel
+        viewModel.newsList.observe(this, Observer {
+            adapter.items = it
+            adapter.notifyDataSetChanged()
+        })
 
         // RecyclerView
         rv_news_list.layoutManager = LinearLayoutManager(this)
@@ -53,7 +59,7 @@ class NewsListActivity : AppCompatActivity() {
         })
 
         // 페이징 처리
-        rv_news_list.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+        /*rv_news_list.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val lastVisibleItemPosition = (recyclerView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition()
@@ -67,11 +73,11 @@ class NewsListActivity : AppCompatActivity() {
                     Log.d("mainactivity", "lastVisibleItemPosition=$lastVisibleItemPosition itemTotalCount=$totalItemCount")
                 }
             }
-        })
+        })*/
 
         // 화면을 당겨서 새로고침 처리
         layout_refresh.setOnRefreshListener {
-            Toast.makeText(this, "새로고침", Toast.LENGTH_SHORT).show()
+            viewModel.updateNewsData()
             layout_refresh.isRefreshing = false
         }
 

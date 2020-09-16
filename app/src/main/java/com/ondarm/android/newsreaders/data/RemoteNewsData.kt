@@ -10,11 +10,11 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
 
-class NewsRemoteData(
+class RemoteNewsData(
 
-) {
+): DataSource {
 
-    fun requestRemoteNewsData(): List<News> {
+    override fun getAllNews(): List<News> {
         val newsList = mutableListOf<News>()
         val googleRssUrl = "https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko"
         val newsUrls = getUrlsFromRss(googleRssUrl)

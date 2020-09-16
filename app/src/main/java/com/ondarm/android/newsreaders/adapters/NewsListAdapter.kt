@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ondarm.android.newsreaders.listeners.OnNewsClickListener
@@ -15,7 +16,7 @@ import kotlinx.android.synthetic.main.item_news.view.*
 
 class NewsListAdapter(
     private val mContext: Context,
-    val items: MutableList<News>
+    var items: List<News>
 ): RecyclerView.Adapter<NewsListAdapter.NewsViewHolder>() {
 
     private lateinit var mOnNewsClickListener: OnNewsClickListener
@@ -35,9 +36,7 @@ class NewsListAdapter(
 
 //        itemView.news_image.alpha = 0.7f
 
-        return NewsViewHolder(
-            itemView
-        )
+        return NewsViewHolder(itemView)
     }
 
     override fun getItemCount(): Int {
