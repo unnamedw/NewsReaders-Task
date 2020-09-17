@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface DataSource {
-    fun getAllNews():List<News>
+    fun getAllNews():Flow<News>
 }

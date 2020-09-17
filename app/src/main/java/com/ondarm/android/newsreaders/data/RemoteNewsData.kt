@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.xmlpull.v1.XmlPullParser
@@ -16,15 +18,16 @@ class RemoteNewsData(
 
 ): DataSource {
 
-    override fun getAllNews(): List<News> {
+    @ExperimentalCoroutinesApi
+    override fun getAllNews(): Flow<News> = flow {
         val newsList = mutableListOf<News>()
         val googleRssUrl = "https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko"
         val newsUrls = getUrlsFromRss(googleRssUrl)
         for (newsUrl in newsUrls) {
-            getNewsFromUrl(newsUrl)?.let { newsList.add(it) }
+//            getNewsFromUrl(newsUrl)?.let { newsList.add(it) }
+            getNewsFromUrl(newsUrl)?.let { emit(it) }
         }
-        return newsList
-    }
+    }.flowOn(Dispatchers.IO)
 
     // 기사 url 로부터 News 를 추출
     private fun getNewsFromUrl(newsUrl: String): News? {

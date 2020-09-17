@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 class NewsRepository(
     private val remoteNewsData: RemoteNewsData
 ): DataSource {
-    override fun getAllNews(): List<News> {
+    override fun getAllNews(): Flow<News> {
         return remoteNewsData.getAllNews()
     }
 

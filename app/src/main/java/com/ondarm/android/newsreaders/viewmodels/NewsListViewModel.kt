@@ -1,21 +1,25 @@
 package com.ondarm.android.newsreaders.viewmodels
 
+import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ondarm.android.newsreaders.data.News
 import com.ondarm.android.newsreaders.data.NewsRepository
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onCompletion
 
 class NewsListViewModel(
     private val repository: NewsRepository
 ): ViewModel() {
-    private val job = Job()
-    private val scope = CoroutineScope(Dispatchers.Main + job)
+//    private val job = Job()
+//    private val scope = CoroutineScope(Dispatchers.Main + job)
 
-    private val _newsList = MutableLiveData<List<News>>()
-    val newsList: LiveData<List<News>>
+    private val _newsList = MutableLiveData<MutableList<News>>()
+    val newsList: LiveData<MutableList<News>>
         get() = _newsList
 
     private val _progress = MutableLiveData<Boolean>()
@@ -26,15 +30,20 @@ class NewsListViewModel(
         updateNewsData()
     }
 
+    @ExperimentalCoroutinesApi
     fun updateNewsData() {
-        
-        scope.launch {
-            _progress.value = true
-            val data = withContext(Dispatchers.IO) {
-                repository.getAllNews()
+        _progress.value = true
+        _newsList.value = mutableListOf()
+        viewModelScope.launch {
+            val data = repository.getAllNews()
+            data
+                .onCompletion {
+                    _progress.value = false
+                }
+                .collect {
+                Log.d("MyFlow", it.title)
+                _newsList.value = _newsList.value?.apply { add(it) } ?: mutableListOf(it)
             }
-            _newsList.value = data
-            _progress.value = false
         }
     }
 }

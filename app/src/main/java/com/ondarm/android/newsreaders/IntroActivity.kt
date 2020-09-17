@@ -1,16 +1,18 @@
 package com.ondarm.android.newsreaders
 
+import android.content.Context
 import android.content.Intent
-import android.os.AsyncTask
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import java.lang.Runnable
-import java.util.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.getSystemService
+
 
 class IntroActivity : AppCompatActivity() {
 
@@ -26,7 +28,5 @@ class IntroActivity : AppCompatActivity() {
         },1300)
 
     }
-
-
 
 }

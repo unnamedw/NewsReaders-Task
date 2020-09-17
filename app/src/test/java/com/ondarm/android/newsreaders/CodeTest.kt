@@ -20,17 +20,11 @@ suspend fun performRequest(request: Int): String {
 }
 
 fun main() = runBlocking<Unit> {
-    launch {
-        repeat(6) {
-            delay(500)
-            println("!")
+    (1..3).asFlow() // a flow of requests
+        .transform { request ->
+            emit("Making request $request")
+            emit(performRequest(request))
         }
-    }
-    listOf(1, 2, 3).asFlow() // a flow of requests
-        .filter {
-            it<2
-        }
-        .map { request -> performRequest(request) }
         .collect { response -> println(response) }
 }
 
