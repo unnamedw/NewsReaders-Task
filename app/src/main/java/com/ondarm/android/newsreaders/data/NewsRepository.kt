@@ -1,5 +1,7 @@
 package com.ondarm.android.newsreaders.data
 
+import kotlinx.coroutines.flow.Flow
+
 /**
  * */
 class NewsRepository(

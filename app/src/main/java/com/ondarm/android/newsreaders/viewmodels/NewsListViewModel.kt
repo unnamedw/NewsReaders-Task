@@ -15,19 +15,26 @@ class NewsListViewModel(
     private val scope = CoroutineScope(Dispatchers.Main + job)
 
     private val _newsList = MutableLiveData<List<News>>()
-
     val newsList: LiveData<List<News>>
         get() = _newsList
+
+    private val _progress = MutableLiveData<Boolean>()
+    val progress: LiveData<Boolean>
+    get() = _progress
 
     init {
         updateNewsData()
     }
 
     fun updateNewsData() {
+        
         scope.launch {
-            withContext(Dispatchers.IO) {
-                _newsList.value = repository.getAllNews()
+            _progress.value = true
+            val data = withContext(Dispatchers.IO) {
+                repository.getAllNews()
             }
+            _newsList.value = data
+            _progress.value = false
         }
     }
 }

@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.xmlpull.v1.XmlPullParser
@@ -21,7 +23,7 @@ class RemoteNewsData(
         for (newsUrl in newsUrls) {
             getNewsFromUrl(newsUrl)?.let { newsList.add(it) }
         }
-        return newsList.toList()
+        return newsList
     }
 
     // 기사 url 로부터 News 를 추출

@@ -4,9 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.BitmapImageViewTarget
 import com.ondarm.android.newsreaders.listeners.OnNewsClickListener
 import com.ondarm.android.newsreaders.R
 import com.ondarm.android.newsreaders.data.News
@@ -50,7 +52,11 @@ class NewsListAdapter(
             mOnNewsClickListener.onNewsClick(position)
         }
         holder.containerView.news_title.text = item.title
-        Glide.with(mContext).load(item.image).into(holder.containerView.news_image)
+        Glide
+            .with(mContext)
+            .load(item.image)
+            .error(R.drawable.fakenews)
+            .into(holder.containerView.news_image)
         holder.containerView.news_description.text = item.description
     }
 

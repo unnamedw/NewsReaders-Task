@@ -46,6 +46,9 @@ class NewsListActivity : AppCompatActivity() {
             adapter.items = it
             adapter.notifyDataSetChanged()
         })
+        viewModel.progress.observe(this, Observer {
+            layout_refresh.isRefreshing = it
+        })
 
         // RecyclerView
         rv_news_list.layoutManager = LinearLayoutManager(this)
@@ -77,9 +80,10 @@ class NewsListActivity : AppCompatActivity() {
 
         // 화면을 당겨서 새로고침 처리
         layout_refresh.setOnRefreshListener {
+            Log.d("MyRefresh", "새로고침 당김")
             viewModel.updateNewsData()
-            layout_refresh.isRefreshing = false
         }
+
 
     }
 
