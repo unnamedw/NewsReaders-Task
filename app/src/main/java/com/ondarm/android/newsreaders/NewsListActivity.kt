@@ -7,24 +7,16 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ondarm.android.newsreaders.adapters.NewsListAdapter
 import com.ondarm.android.newsreaders.listeners.OnNewsClickListener
-import com.ondarm.android.newsreaders.data.News
 import com.ondarm.android.newsreaders.data.NewsRepository
 import com.ondarm.android.newsreaders.data.RemoteNewsData
 import com.ondarm.android.newsreaders.databinding.ActivityNewsListBinding
 import com.ondarm.android.newsreaders.viewmodels.NewsListViewModel
 import com.ondarm.android.newsreaders.viewmodels.NewsListViewModelFactory
 import kotlinx.android.synthetic.main.activity_news_list.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 
 class NewsListActivity : AppCompatActivity() {
@@ -83,7 +75,6 @@ class NewsListActivity : AppCompatActivity() {
             Log.d("MyRefresh", "새로고침 당김")
             viewModel.updateNewsData()
         }
-
 
     }
 

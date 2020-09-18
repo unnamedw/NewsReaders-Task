@@ -1,5 +1,6 @@
 package com.ondarm.android.newsreaders.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -20,7 +21,7 @@ class RemoteNewsData(
 
     @ExperimentalCoroutinesApi
     override fun getAllNews(): Flow<News> = flow {
-        val newsList = mutableListOf<News>()
+//        val newsList = mutableListOf<News>()
         val googleRssUrl = "https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko"
         val newsUrls = getUrlsFromRss(googleRssUrl)
         for (newsUrl in newsUrls) {

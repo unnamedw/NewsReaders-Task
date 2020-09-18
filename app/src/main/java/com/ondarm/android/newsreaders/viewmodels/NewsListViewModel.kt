@@ -24,7 +24,7 @@ class NewsListViewModel(
 
     private val _progress = MutableLiveData<Boolean>()
     val progress: LiveData<Boolean>
-    get() = _progress
+        get() = _progress
 
     init {
         updateNewsData()
