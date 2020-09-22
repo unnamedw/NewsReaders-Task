@@ -10,22 +10,57 @@ import org.junit.runners.model.TestClass
 import org.xmlpull.v1.XmlPullParser
 import java.io.InputStreamReader
 import java.net.URL
+import java.util.concurrent.atomic.AtomicInteger
 import java.util.regex.Pattern
+import kotlin.math.sign
 import kotlin.random.Random
+import kotlin.reflect.KClass
+import kotlin.reflect.jvm.internal.impl.resolve.constants.KClassValue
 import kotlin.system.measureTimeMillis
 
-suspend fun performRequest(request: Int): String {
-    delay(1000) // imitate long-running asynchronous work
-    return "response $request"
+var count = 0
+var set = mutableSetOf<Int>()
+
+fun main() {
+
+
+    repeat(300) {
+        MyThread().start()
+    }
+
+    Thread.sleep(1000)
+    println("result ${MyThread.set.size}")
+
+
+
+}
+@Synchronized
+fun increase(): Int {
+    count++
+    set.add(count)
+    return count
 }
 
-fun main() = runBlocking<Unit> {
-    (1..3).asFlow() // a flow of requests
-        .transform { request ->
-            emit("Making request $request")
-            emit(performRequest(request))
+
+class MyThread: Thread() {
+    companion object {
+        var count = 0
+        var set = mutableSetOf<Int>()
+
+        private fun increase(): Int = synchronized(this::class.java) {
+            count++
+            set.add(count)
+            return count
         }
-        .collect { response -> println(response) }
+
+    }
+
+    override fun run() {
+        val num = increase()
+        println("${currentThread().name}: "+num)
+    }
+
+
 }
 
 

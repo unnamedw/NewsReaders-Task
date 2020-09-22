@@ -17,7 +17,7 @@ import kotlin.system.measureTimeMillis
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
-    @Test
+//    @Test
     fun assert_test() {
         val input1 = arrayOf("frodo", "fradi", "crodo", "abc123", "frodoc")
         val input2 = arrayOf("*rodo", "*rodo", "******")

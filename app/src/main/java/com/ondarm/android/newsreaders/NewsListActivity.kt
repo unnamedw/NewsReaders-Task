@@ -17,21 +17,19 @@ import com.ondarm.android.newsreaders.databinding.ActivityNewsListBinding
 import com.ondarm.android.newsreaders.viewmodels.NewsListViewModel
 import com.ondarm.android.newsreaders.viewmodels.NewsListViewModelFactory
 import kotlinx.android.synthetic.main.activity_news_list.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-
+@ExperimentalCoroutinesApi
 class NewsListActivity : AppCompatActivity() {
-//    lateinit var newsList: List<News>
     private val adapter by lazy { NewsListAdapter(this, listOf()) }
-    private val remoteDataSource = RemoteNewsData()
-    private val repository = NewsRepository(remoteDataSource)
-    private val viewModel: NewsListViewModel by viewModels { NewsListViewModelFactory(repository) }
+    private val viewModel: NewsListViewModel by viewModels {
+        InjectorUtil.provideNewsListViewModelFactory()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = DataBindingUtil.setContentView<ActivityNewsListBinding>(this, R.layout.activity_news_list)
-            .apply {
-                lifecycleOwner = this@NewsListActivity
-            }
+            .apply { lifecycleOwner = this@NewsListActivity }
 
         // 뉴스 세팅
         viewModel.newsList.observe(this, Observer {

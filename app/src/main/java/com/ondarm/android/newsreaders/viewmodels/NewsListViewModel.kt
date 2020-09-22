@@ -11,12 +11,12 @@ import com.ondarm.android.newsreaders.data.NewsRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onEach
 
+@ExperimentalCoroutinesApi
 class NewsListViewModel(
     private val repository: NewsRepository
 ): ViewModel() {
-//    private val job = Job()
-//    private val scope = CoroutineScope(Dispatchers.Main + job)
 
     private val _newsList = MutableLiveData<MutableList<News>>()
     val newsList: LiveData<MutableList<News>>
@@ -30,20 +30,13 @@ class NewsListViewModel(
         updateNewsData()
     }
 
-    @ExperimentalCoroutinesApi
     fun updateNewsData() {
         _progress.value = true
         _newsList.value = mutableListOf()
         viewModelScope.launch {
             val data = repository.getAllNews()
-            data
-                .onCompletion {
-                    _progress.value = false
-                }
-                .collect {
-                Log.d("MyFlow", it.title)
-                _newsList.value = _newsList.value?.apply { add(it) } ?: mutableListOf(it)
-            }
+            data.onCompletion { _progress.value = false }
+                .collect { _newsList.value = _newsList.value?.apply { add(it) } ?: mutableListOf(it) }
         }
     }
 }

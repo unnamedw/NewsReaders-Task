@@ -1,25 +1,35 @@
 package com.ondarm.android.newsreaders.data
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.withContext
 import org.jsoup.Jsoup
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
+import kotlin.system.measureTimeMillis
+import kotlin.time.measureTimedValue
 
+@ExperimentalCoroutinesApi
 class RemoteNewsData(
-
+/**
+ * Parameter
+ * */
 ): DataSource {
 
-    @ExperimentalCoroutinesApi
+    companion object {
+        @Volatile private var instance: RemoteNewsData? = null
+
+        fun getInstance() =
+            instance ?: synchronized(this) {
+                instance ?: RemoteNewsData().also { instance = it }
+            }
+    }
+
+
     override fun getAllNews(): Flow<News> = flow {
 //        val newsList = mutableListOf<News>()
         val googleRssUrl = "https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko"
@@ -33,13 +43,20 @@ class RemoteNewsData(
     // 기사 url 로부터 News 를 추출
     private fun getNewsFromUrl(newsUrl: String): News? {
         try {
-            val doc = Jsoup.connect(newsUrl).get().head() // 오래걸림 (0.4초 이상)
+            val doc by lazy {
+                Jsoup.connect(newsUrl)
+                    .timeout(1500)
+                    .get()
+                    .head() }
+            val time = measureTimeMillis { doc }
             val title = doc.select("meta[property=og:title]").first()?.attr("content")
                 ?: doc.select("title").first().html()
             val image = doc.select("meta[property=og:image]").first()?.attr("content") ?: ""
             val description = doc.select("meta[property=og:description]").first()?.attr("content")
                 ?: doc.select("description").first()?.text()
                 ?: doc.select("meta[name=description]").attr("content")
+
+            Log.d("MyTime", "$title [${time}초]")
             return News(
                 newsUrl,
                 title,
@@ -48,6 +65,7 @@ class RemoteNewsData(
             )
         } catch (e: Exception) {
             e.printStackTrace()
+
             return null
         }
     }
