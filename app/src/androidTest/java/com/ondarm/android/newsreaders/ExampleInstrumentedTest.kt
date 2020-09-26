@@ -1,9 +1,19 @@
 package com.ondarm.android.newsreaders
 
 import android.util.Log
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.ondarm.android.newsreaders.data.RemoteNewsData
+import com.ondarm.android.newsreaders.viewmodels.NewsListViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onCompletion
+import org.json.JSONArray
 import org.json.JSONObject
 
 import org.junit.Test
@@ -11,6 +21,7 @@ import org.junit.runner.RunWith
 
 import org.junit.Assert.*
 import java.io.InputStreamReader
+import kotlin.system.measureTimeMillis
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -18,26 +29,15 @@ import java.io.InputStreamReader
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
+@ExperimentalCoroutinesApi
 class ExampleInstrumentedTest {
+
+    @InternalCoroutinesApi
     @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.ondarm.android.newsreaders", appContext.packageName)
-
-        val assetManager = InstrumentationRegistry.getInstrumentation().targetContext.assets
-        val jsonString = InputStreamReader(assetManager.open("test.json")).readText()
-
-        if (jsonString.isNotEmpty()) {
-            val jsonObject = JSONObject(jsonString)
-            val jsonArray = jsonObject.getJSONArray("dev_atanasio")
-            for (i in 0 until jsonArray.length()) {
-                val obj = JSONObject(jsonArray[i].toString())
-                if (obj.get("tagname")=="Lv") {
-                    Log.d("UnitTest", obj.toString())
-                }
-
-            }
-        }
+    fun androidTest() {
+        val json = """["1", "2등", "3"]"""
+//        val json = "[1, 2, 3]"
+        val a = JSONArray(json)
+        Log.d("MyJson", "${a.get(1)}")
     }
 }

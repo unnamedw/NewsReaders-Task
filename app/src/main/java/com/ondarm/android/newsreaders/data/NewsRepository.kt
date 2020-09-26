@@ -19,6 +19,7 @@ class NewsRepository(
             instance ?: synchronized(this) {
                 instance ?: NewsRepository(remoteNewsData).also { instance = it }
             }
+
     }
 
 }

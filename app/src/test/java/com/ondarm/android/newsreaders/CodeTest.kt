@@ -23,13 +23,12 @@ var set = mutableSetOf<Int>()
 
 fun main() {
 
+    val sampleArr = arrayOf(
+        arrayOf("G", "G", "G"),
+        arrayOf("G", "H", "G"),
+        arrayOf("G", "G", "G"))
 
-    repeat(300) {
-        MyThread().start()
-    }
 
-    Thread.sleep(1000)
-    println("result ${MyThread.set.size}")
 
 
 

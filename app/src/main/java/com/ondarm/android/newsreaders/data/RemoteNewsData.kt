@@ -1,8 +1,7 @@
 package com.ondarm.android.newsreaders.data
 
 import android.util.Log
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -29,15 +28,20 @@ class RemoteNewsData(
             }
     }
 
-
     override fun getAllNews(): Flow<News> = flow {
-//        val newsList = mutableListOf<News>()
-        val googleRssUrl = "https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko"
-        val newsUrls = getUrlsFromRss(googleRssUrl)
-        for (newsUrl in newsUrls) {
-//            getNewsFromUrl(newsUrl)?.let { newsList.add(it) }
-            getNewsFromUrl(newsUrl)?.let { emit(it) }
+        val Time = measureTimeMillis {
+            val googleRssUrl = "https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko"
+            val newsUrls = getUrlsFromRss(googleRssUrl)
+            val newsAsync = mutableListOf<Deferred<News?>>()
+            for (newsUrl in newsUrls) {
+//                getNewsFromUrl(newsUrl)?.let { emit(it) }
+                CoroutineScope(Dispatchers.Default).async { getNewsFromUrl(newsUrl) }.also { newsAsync.add(it) }
+            }
+            for (newsDeferred in newsAsync) {
+                newsDeferred.await()?.let { emit(it) }
+            }
         }
+        Log.d("MyTime", "걸린시간: $Time ms")
     }.flowOn(Dispatchers.IO)
 
     // 기사 url 로부터 News 를 추출
@@ -56,7 +60,7 @@ class RemoteNewsData(
                 ?: doc.select("description").first()?.text()
                 ?: doc.select("meta[name=description]").attr("content")
 
-            Log.d("MyTime", "$title [${time}초]")
+//            Log.d("MyTime", "$title [${time}초]")
             return News(
                 newsUrl,
                 title,
