@@ -29,19 +29,18 @@ class RemoteNewsData(
     }
 
     override fun getAllNews(): Flow<News> = flow {
-        val Time = measureTimeMillis {
+        val time = measureTimeMillis {
             val googleRssUrl = "https://news.google.com/rss?hl=ko&gl=KR&ceid=KR:ko"
             val newsUrls = getUrlsFromRss(googleRssUrl)
             val newsAsync = mutableListOf<Deferred<News?>>()
             for (newsUrl in newsUrls) {
-//                getNewsFromUrl(newsUrl)?.let { emit(it) }
                 CoroutineScope(Dispatchers.Default).async { getNewsFromUrl(newsUrl) }.also { newsAsync.add(it) }
             }
             for (newsDeferred in newsAsync) {
                 newsDeferred.await()?.let { emit(it) }
             }
         }
-        Log.d("MyTime", "걸린시간: $Time ms")
+        Log.d("MyTime", "걸린시간: $time ms")
     }.flowOn(Dispatchers.IO)
 
     // 기사 url 로부터 News 를 추출
@@ -49,7 +48,7 @@ class RemoteNewsData(
         try {
             val doc by lazy {
                 Jsoup.connect(newsUrl)
-                    .timeout(1500)
+                    .timeout(3000)
                     .get()
                     .head() }
             val time = measureTimeMillis { doc }

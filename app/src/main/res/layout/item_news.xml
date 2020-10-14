@@ -4,6 +4,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -20,70 +22,60 @@
 
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <ImageView
                     android:id="@+id/news_image"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_weight="0.6"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/fakenews"
-                    app:layout_constraintWidth_percent="0.25"
-                    app:layout_constraintHeight_percent="0.8"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/news_title"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    android:src="@drawable/fakenews"/>
 
-                <TextView
-                    android:id="@+id/news_title"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:gravity="center"
-                    android:text="title"
-                    android:textStyle="bold"
-                    android:maxLines="2"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintBottom_toTopOf="@id/news_description"
-                    app:layout_constraintEnd_toStartOf="@+id/news_image"
-                    app:layout_constraintHeight_percent="0.4"
-                    app:layout_constraintWidth_percent="0.6"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_weight="0.4"
+                    android:orientation="vertical"
+                    android:padding="10sp">
+                    <TextView
+                        android:id="@+id/news_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:text="title"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
+<!--                    <android.widget.Space-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="0dp"-->
+<!--                        android:layout_weight="0.1"/>-->
+                    <TextView
+                        android:id="@+id/news_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.4"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        android:text="description"
+                        android:maxLines="2"
+                        android:ellipsize="end"/>
+                    <TextView
+                        android:id="@+id/news_keyword"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="center"
+                        android:text="keyword"
+                        android:textStyle="italic" />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/news_description"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:gravity="center"
-                    android:maxLines="2"
-                    android:text="description"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintBottom_toTopOf="@id/news_keyword"
-                    app:layout_constraintEnd_toStartOf="@+id/news_image"
-                    app:layout_constraintHeight_percent="0.3"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/news_title"
-                    app:layout_constraintWidth_percent="0.6"/>
-
-                <TextView
-                    android:id="@+id/news_keyword"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:gravity="center"
-                    android:text="keyword"
-                    android:textStyle="italic"
-                    app:autoSizeTextType="uniform"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/news_image"
-                    app:layout_constraintHeight_percent="0.0"
-                    app:layout_constraintWidth_percent="0.6"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/news_description" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 

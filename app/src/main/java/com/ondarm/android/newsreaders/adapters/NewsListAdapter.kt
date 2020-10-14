@@ -32,8 +32,9 @@ class NewsListAdapter(
         val itemView: View = inflater.inflate(R.layout.item_news, parent, false)
 
         // 뉴스 아이템 높이 설정
+        val itemHeight = 0.5 // 1 = 100%
         val layoutParams = itemView.layoutParams
-        layoutParams.height = (parent.height * 0.25).toInt()
+        layoutParams.height = (parent.height * itemHeight).toInt()
         itemView.layoutParams = layoutParams
 
 //        itemView.news_image.alpha = 0.7f

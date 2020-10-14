@@ -1,65 +1,55 @@
 package com.ondarm.android.newsreaders
 
+import androidx.appcompat.app.AppCompatActivity
 import com.ondarm.android.newsreaders.data.News
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import org.hamcrest.CoreMatchers.startsWith
-import org.junit.runners.model.TestClass
-import org.xmlpull.v1.XmlPullParser
-import java.io.InputStreamReader
-import java.net.URL
-import java.util.concurrent.atomic.AtomicInteger
-import java.util.regex.Pattern
-import kotlin.math.sign
-import kotlin.random.Random
-import kotlin.reflect.KClass
-import kotlin.reflect.jvm.internal.impl.resolve.constants.KClassValue
+import kotlinx.coroutines.channels.actor
 import kotlin.system.measureTimeMillis
 
-var count = 0
-var set = mutableSetOf<Int>()
-
-fun main() {
-
-    val sampleArr = arrayOf(
-        arrayOf("G", "G", "G"),
-        arrayOf("G", "H", "G"),
-        arrayOf("G", "G", "G"))
-
-
-
-
-
-}
-@Synchronized
-fun increase(): Int {
-    count++
-    set.add(count)
-    return count
-}
-
-
-class MyThread: Thread() {
-    companion object {
-        var count = 0
-        var set = mutableSetOf<Int>()
-
-        private fun increase(): Int = synchronized(this::class.java) {
-            count++
-            set.add(count)
-            return count
+fun main() = runBlocking<Unit> {
+    val counter = myFun() // create the actor
+    withContext(Dispatchers.Default) {
+        massiveRun {
+            counter.send(IncCounter)
         }
-
     }
-
-    override fun run() {
-        val num = increase()
-        println("${currentThread().name}: "+num)
-    }
-
-
+    // send a message to get a counter value from an actor
+    val response = CompletableDeferred<Int>()
+    counter.send(GetCounter(response))
+    println("Counter = ${response.await()}")
+    counter.close() // shutdown the actor
 }
 
+// This function launches a new counter actor
+fun CoroutineScope.myFun() = actor<CounterMsg> {
+    var counter = 0 // actor state
+    for (msg in channel) { // iterate over incoming messages
+        when (msg) {
+            is IncCounter -> counter++
+            is GetCounter -> msg.response.complete(counter)
+        }
+    }
+}
 
+// Message types for counterActor
+sealed class CounterMsg
+object IncCounter : CounterMsg() // one-way message to increment counter
+class GetCounter(val response: CompletableDeferred<Int>) : CounterMsg() // a request with reply
+
+
+
+
+suspend fun massiveRun(action: suspend () -> Unit) {
+    val n = 100  // number of coroutines to launch
+    val k = 1000 // times an action is repeated by each coroutine
+    val time = measureTimeMillis {
+        coroutineScope { // scope for coroutines
+            repeat(n) {
+                launch {
+                    repeat(k) { action() }
+                }
+            }
+        }
+    }
+    println("Completed ${n * k} actions in $time ms")
+}

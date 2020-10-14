@@ -11,19 +11,21 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ondarm.android.newsreaders.adapters.NewsListAdapter
 import com.ondarm.android.newsreaders.listeners.OnNewsClickListener
-import com.ondarm.android.newsreaders.data.NewsRepository
-import com.ondarm.android.newsreaders.data.RemoteNewsData
 import com.ondarm.android.newsreaders.databinding.ActivityNewsListBinding
+import com.ondarm.android.newsreaders.di.InjectorUtil
 import com.ondarm.android.newsreaders.viewmodels.NewsListViewModel
 import com.ondarm.android.newsreaders.viewmodels.NewsListViewModelFactory
 import kotlinx.android.synthetic.main.activity_news_list.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.koin.android.ext.android.inject
 
 @ExperimentalCoroutinesApi
 class NewsListActivity : AppCompatActivity() {
+    private val newsListViewModelFactory: NewsListViewModelFactory by inject()
     private val adapter by lazy { NewsListAdapter(this, listOf()) }
     private val viewModel: NewsListViewModel by viewModels {
-        InjectorUtil.provideNewsListViewModelFactory()
+//        InjectorUtil.provideNewsListViewModelFactory()
+        newsListViewModelFactory
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +33,7 @@ class NewsListActivity : AppCompatActivity() {
         val binding = DataBindingUtil.setContentView<ActivityNewsListBinding>(this, R.layout.activity_news_list)
             .apply { lifecycleOwner = this@NewsListActivity }
 
+        val newList = mutableListOf<String>()
         // 뉴스 세팅
         viewModel.newsList.observe(this, Observer {
             adapter.items = it

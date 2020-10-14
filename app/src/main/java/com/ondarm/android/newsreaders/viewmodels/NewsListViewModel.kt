@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 
 @ExperimentalCoroutinesApi
-class NewsListViewModel(
+class NewsListViewModel (
     private val repository: NewsRepository
 ): ViewModel() {
 

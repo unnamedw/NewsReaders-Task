@@ -4,7 +4,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 @ExperimentalCoroutinesApi
-class NewsRepository(
+class NewsRepository  constructor(
     private val remoteNewsData: RemoteNewsData
 ): DataSource {
 

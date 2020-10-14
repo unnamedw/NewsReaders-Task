@@ -10,7 +10,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
  * */
 @ExperimentalCoroutinesApi
 @Suppress("UNCHECKED_CAST")
-class NewsListViewModelFactory(
+class NewsListViewModelFactory (
     private val repository: NewsRepository
 ): ViewModelProvider.NewInstanceFactory() {
 
